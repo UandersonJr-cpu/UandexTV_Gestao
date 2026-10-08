@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Entrar | Uandex TV{% endblock %}
+{% block content %}
+<div class="login-wrap"><div class="login-card">
+<div class="brand login-brand"><span class="brand-mark">U</span><div><b>UANDEX TV</b><small>PAINEL DE GESTÃO</small></div></div>
+<h1>Bem-vindo de volta</h1><p class="muted">Entre para gerenciar seus clientes e pagamentos.</p>
+<form method="post">
+<label>Usuário</label><input name="username" autocomplete="username" required placeholder="Seu usuário">
+<label>Senha</label><input name="password" type="password" autocomplete="current-password" required placeholder="Sua senha">
+<button class="btn primary full" type="submit">Entrar no painel →</button>
+</form><p class="login-note">Primeiro acesso: admin / MudeEstaSenha123!</p><p class="login-note">Altere a senha imediatamente após entrar.</p>
+</div></div>
+{% endblock %}

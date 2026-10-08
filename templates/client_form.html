@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{% if item %}Editar cliente{% else %}Novo cliente{% endif %} | Uandex TV{% endblock %}
+{% block page_title %}{% if item %}Editar cliente{% else %}Novo cliente{% endif %}{% endblock %}
+{% block content %}
+<div class="form-panel"><div class="panel-head"><div><h3>Dados do cliente</h3><p class="muted">Preencha os campos necessários para manter o cadastro organizado.</p></div><a href="{{ url_for('clients') }}">← Voltar</a></div>
+<form method="post" class="form-grid">
+<div class="field wide"><label>Nome do cliente *</label><input name="name" required value="{{ item.name if item else '' }}" placeholder="Nome completo"></div>
+<div class="field"><label>WhatsApp / telefone</label><input name="phone" value="{{ item.phone if item else '' }}" placeholder="Ex.: 5528999999999"></div>
+<div class="field"><label>Aplicativo utilizado</label><input name="app_name" value="{{ item.app_name if item else '' }}" placeholder="Nome do aplicativo"></div>
+<div class="field"><label>Dispositivo</label><select name="device">{% for d in ['','Smart TV','TV Box','Celular','Tablet','Computador','Outro'] %}<option value="{{ d }}" {% if item and item.device==d %}selected{% endif %}>{{ d or 'Selecione' }}</option>{% endfor %}</select></div>
+<div class="field"><label>Login / usuário</label><input name="username" value="{{ item.username if item else '' }}" placeholder="Usuário do cliente"></div>
+<div class="field"><label>Valor mensal (R$)</label><input name="monthly_price" type="number" step="0.01" min="0" value="{{ item.monthly_price if item else '24.90' }}"></div>
+<div class="field"><label>Data de vencimento</label><input name="expires_on" type="date" value="{{ item.expires_on if item else '' }}"></div>
+<div class="field"><label>Status manual</label><select name="status">{% for s in ['Ativo','Em dia','Vence em breve','Vencido','Cancelado'] %}<option value="{{ s }}" {% if item and item.status==s %}selected{% elif not item and s=='Ativo' %}selected{% endif %}>{{ s }}</option>{% endfor %}</select><small class="muted">O status de vencimento é atualizado automaticamente ao abrir o painel.</small></div>
+<div class="field wide"><label>Observações</label><textarea name="notes" rows="3" placeholder="Informações úteis sobre atendimento ou plano">{{ item.notes if item else '' }}</textarea></div>
+<div class="field wide form-actions"><button class="btn primary" type="submit">Salvar cliente</button><a class="btn ghost" href="{{ url_for('clients') }}">Cancelar</a></div>
+</form><p class="security-note">Por segurança, não armazene senhas de acesso dos clientes neste campo. Use um gerenciador de senhas confiável se isso for necessário.</p>
+</div>
+{% endblock %}

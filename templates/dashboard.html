@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Visão geral | Uandex TV{% endblock %}
+{% block page_title %}Visão geral{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><h2>Resumo do negócio</h2><p class="muted">Acompanhe sua carteira e os recebimentos em um só lugar.</p></div><a class="btn primary" href="{{ url_for('client_form') }}">＋ Novo cliente</a></div>
+<div class="stats-grid">
+ <div class="stat-card"><span>CLIENTES ATIVOS / NÃO CANCELADOS</span><strong>{{ total }}</strong><small>Clientes cadastrados</small></div>
+ <div class="stat-card"><span>PREVISÃO MENSAL</span><strong>R$ {{ '%.2f'|format(monthly)|replace('.', ',') }}</strong><small>Com vencimentos em dia ou próximos</small></div>
+ <div class="stat-card"><span>RECEBIDO ESTE MÊS</span><strong>R$ {{ '%.2f'|format(payments_month)|replace('.', ',') }}</strong><small>Pagamentos registrados</small></div>
+ <div class="stat-card"><span>VENCIDOS</span><strong class="{% if overdue %}red-text{% endif %}">{{ overdue }}</strong><small>{{ due_soon }} vencem nos próximos 3 dias</small></div>
+</div>
+<div class="content-grid">
+<section class="panel"><div class="panel-head"><div><h3>Vencimentos para acompanhar</h3><p class="muted">Clientes vencidos ou próximos do vencimento</p></div><a href="{{ url_for('clients') }}">Ver todos →</a></div>
+{% if expiring %}<div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Vencimento</th><th>Status</th><th>Contato</th></tr></thead><tbody>
+{% for c in expiring %}<tr><td><b>{{ c.name }}</b><small class="subline">{{ c.app_name or 'Aplicativo não informado' }}</small></td><td>{{ c.expires_on or '—' }}</td><td><span class="pill {% if c.status=='Vencido' %}danger{% else %}warning{% endif %}">{{ c.status }}</span></td><td>{{ c.phone or '—' }}</td></tr>{% endfor %}
+</tbody></table></div>{% else %}<div class="empty">Nenhum vencimento urgente por enquanto.</div>{% endif %}
+</section>
+<section class="panel"><div class="panel-head"><div><h3>Pagamentos recentes</h3><p class="muted">Últimos registros adicionados</p></div><a href="{{ url_for('payments') }}">Ver histórico →</a></div>
+{% if recent %}<div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Data</th><th>Valor</th></tr></thead><tbody>{% for p in recent %}<tr><td>{{ p.client_name }}</td><td>{{ p.paid_on }}</td><td><b>R$ {{ '%.2f'|format(p.amount)|replace('.', ',') }}</b></td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty">Nenhum pagamento registrado ainda.</div>{% endif %}
+</section></div>
+{% endblock %}

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Uandex TV{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+{% if session.get('user_id') %}
+<aside class="sidebar">
+  <div class="brand"><span class="brand-mark">U</span><div><b>UANDEX TV</b><small>PAINEL DE GESTÃO</small></div></div>
+  <nav>
+    <a href="{{ url_for('dashboard') }}">▦ &nbsp; Visão geral</a>
+    <a href="{{ url_for('clients') }}">♙ &nbsp; Clientes</a>
+    <a href="{{ url_for('payments') }}">R$ &nbsp; Pagamentos</a>
+    <a href="{{ url_for('change_password') }}">⚙ &nbsp; Alterar senha</a>
+  </nav>
+  <div class="sidebar-bottom"><span>Conectado como {{ session.get('username') }}</span><a href="{{ url_for('logout') }}">Sair ↗</a></div>
+</aside>
+{% endif %}
+<main class="{% if session.get('user_id') %}main{% else %}main-login{% endif %}">
+  {% if session.get('user_id') %}<header class="topbar"><div><span class="eyebrow">GESTÃO DE CLIENTES</span><h1>{% block page_title %}Painel{% endblock %}</h1></div><div class="topbar-right">{{ session.get('username') }} <span class="avatar">U</span></div></header>{% endif %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}<div class="messages">{% for category, message in messages %}<div class="message {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+</body>
+</html>

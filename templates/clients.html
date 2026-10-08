@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Clientes | Uandex TV{% endblock %}
+{% block page_title %}Clientes{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><h2>Sua carteira de clientes</h2><p class="muted">Cadastre e acompanhe os dados de cada cliente.</p></div><a class="btn primary" href="{{ url_for('client_form') }}">＋ Novo cliente</a></div>
+<form class="filters" method="get"><input name="q" value="{{ q }}" placeholder="Buscar por nome, telefone ou login"><select name="status"><option value="">Todos os status</option>{% for s in ['Em dia','Vence em breve','Vencido','Ativo','Cancelado'] %}<option value="{{ s }}" {% if status==s %}selected{% endif %}>{{ s }}</option>{% endfor %}</select><button class="btn secondary">Filtrar</button><a class="btn ghost" href="{{ url_for('clients') }}">Limpar</a></form>
+<section class="panel">
+{% if clients %}<div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Contato</th><th>Aplicativo / dispositivo</th><th>Login</th><th>Mensalidade</th><th>Vencimento</th><th>Status</th><th>Ações</th></tr></thead><tbody>
+{% for c in clients %}<tr><td><b>{{ c.name }}</b><small class="subline">ID {{ c.id }}</small></td><td>{{ c.phone or '—' }}{% if c.phone %}<a class="subline wa" target="_blank" rel="noopener" href="https://wa.me/{{ c.phone|replace(' ','')|replace('-','')|replace('+','')|replace('(','')|replace(')','') }}">Abrir WhatsApp ↗</a>{% endif %}</td><td>{{ c.app_name or '—' }}<small class="subline">{{ c.device or 'Dispositivo não informado' }}</small></td><td>{{ c.username or '—' }}</td><td>R$ {{ '%.2f'|format(c.monthly_price)|replace('.', ',') }}</td><td>{{ c.expires_on or '—' }}</td><td><span class="pill {% if c.status=='Vencido' %}danger{% elif c.status=='Vence em breve' %}warning{% elif c.status=='Cancelado' %}neutral{% else %}success{% endif %}">{{ c.status }}</span></td><td class="actions"><a class="btn small secondary" href="{{ url_for('client_form', client_id=c.id) }}">Editar</a><form method="post" action="{{ url_for('delete_client', client_id=c.id) }}" onsubmit="return confirm('Excluir este cliente e todo o histórico de pagamentos?')"><button class="btn small danger-btn">Excluir</button></form></td></tr>{% endfor %}
+</tbody></table></div>{% else %}<div class="empty">Nenhum cliente encontrado. Cadastre seu primeiro cliente.</div>{% endif %}
+</section>
+{% endblock %}
