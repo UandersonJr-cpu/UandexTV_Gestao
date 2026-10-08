@@ -1,0 +1,12 @@
+# Modelo de configuração WSGI para PythonAnywhere.
+# Edite os caminhos e a chave secreta antes de usar.
+import os
+import sys
+
+project_home = '/home/SEU_USUARIO/uandex_tv'
+if project_home not in sys.path:
+    sys.path.insert(0, project_home)
+
+os.environ['SECRET_KEY'] = 'COLOQUE_UMA_CHAVE_LONGA_E_ALEATORIA_AQUI'
+
+from app import app as application
